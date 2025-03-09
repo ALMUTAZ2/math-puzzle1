@@ -1,0 +1,310 @@
+  <!DOCTYPE html>
+  <html lang="ar" dir="rtl">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>لغز رياضي</title>
+      <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
+      <script src="https://api.ipify.org?format=jsonp&callback=getIP" async></script>
+      <!-- إضافة الخطوط العربية من Google Fonts -->
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+      <!-- إضافة مكتبة Animate.css للتأثيرات الحركية -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+      <style>
+          :root {
+              --primary-color: #2c3e50;
+              --secondary-color: #3498db;
+              --accent-color: #e74c3c;
+              --background-color: #ecf0f1;
+              --text-color: #2c3e50;
+              --success-color: #27ae60;
+              --error-color: #c0392b;
+          }
+
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
+
+          body {
+              font-family: 'Cairo', sans-serif;
+              background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+              min-height: 100vh;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 20px;
+              line-height: 1.6;
+              color: var(--text-color);
+          }
+
+          .container {
+              max-width: 600px;
+              width: 100%;
+              background: rgba(255, 255, 255, 0.95);
+              padding: 2rem;
+              border-radius: 20px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+              backdrop-filter: blur(10px);
+              transform: translateY(0);
+              transition: transform 0.3s ease;
+          }
+
+          .container:hover {
+              transform: translateY(-5px);
+          }
+
+          h1 {
+              color: var(--primary-color);
+              font-size: 2.5rem;
+              margin-bottom: 1.5rem;
+              text-align: center;
+              position: relative;
+              padding-bottom: 10px;
+          }
+
+          h1::after {
+              content: '';
+              position: absolute;
+              bottom: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 100px;
+              height: 4px;
+              background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+              border-radius: 2px;
+          }
+
+          .puzzle-section {
+              background: #fff;
+              padding: 1.5rem;
+              border-radius: 15px;
+              margin: 1.5rem 0;
+              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+          }
+
+          .puzzle-list {
+              list-style: none;
+              padding: 0;
+              margin: 1.5rem 0;
+          }
+
+          .puzzle-list li {
+              padding: 10px 15px;
+              margin: 8px 0;
+              background: #f8f9fa;
+              border-radius: 8px;
+              font-size: 1.1rem;
+              transition: transform 0.2s ease;
+          }
+
+          .puzzle-list li:hover {
+              transform: scale(1.02);
+              background: #e9ecef;
+          }
+
+          input[type="text"] {
+              width: 100%;
+              padding: 12px 15px;
+              margin: 10px 0;
+              border: 2px solid #e0e0e0;
+              border-radius: 8px;
+              font-size: 1rem;
+              transition: all 0.3s ease;
+              font-family: 'Cairo', sans-serif;
+          }
+
+          input[type="text"]:focus {
+              border-color: var(--secondary-color);
+              box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+              outline: none;
+          }
+
+          button {
+              width: 100%;
+              padding: 12px 25px;
+              background: linear-gradient(45deg, var(--secondary-color), #2980b9);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              font-size: 1.1rem;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-family: 'Cairo', sans-serif;
+              font-weight: 600;
+              margin-top: 1rem;
+          }
+
+          button:hover {
+              background: linear-gradient(45deg, #2980b9, var(--secondary-color));
+              transform: translateY(-2px);
+              box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+          }
+
+          button:active {
+              transform: translateY(0);
+          }
+
+          .result {
+              margin-top: 1.5rem;
+              padding: 15px;
+              border-radius: 8px;
+              font-size: 1.2rem;
+              font-weight: bold;
+              text-align: center;
+              opacity: 0;
+              transition: opacity 0.3s ease;
+          }
+
+          .result.show {
+              opacity: 1;
+          }
+
+          .result.success {
+              background-color: rgba(39, 174, 96, 0.1);
+              color: var(--success-color);
+              border: 2px solid var(--success-color);
+          }
+
+          .result.error {
+              background-color: rgba(192, 57, 43, 0.1);
+              color: var(--error-color);
+              border: 2px solid var(--error-color);
+          }
+
+          @media (max-width: 480px) {
+              .container {
+                  padding: 1.5rem;
+              }
+
+              h1 {
+                  font-size: 2rem;
+              }
+
+              .puzzle-list li {
+                  font-size: 1rem;
+              }
+          }
+
+          /* تأثيرات حركية للعناصر */
+          .fade-in {
+              animation: fadeIn 0.5s ease-in;
+          }
+
+          @keyframes fadeIn {
+              from {
+                  opacity: 0;
+                  transform: translateY(20px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
+          }
+
+          /* تأثير خاص للإجابة الأخيرة */
+          .puzzle-list li:last-child {
+              background: linear-gradient(45deg, #ffd3d3, #fff);
+              border: 2px dashed var(--accent-color);
+              font-weight: bold;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container animate__animated animate__fadeIn">
+          <h1>لغز رياضي ممتع</h1>
+          <div class="puzzle-section fade-in">
+              <p>مرحباً بك! يرجى إدخال اسمك للبدء في حل اللغز:</p>
+              <input type="text" id="name" placeholder="أدخل اسمك هنا" class="animate__animated animate__fadeInUp">
+              
+              <p class="fade-in">حل اللغز التالي:</p>
+              <ul class="puzzle-list">
+                  <li class="animate__animated animate__fadeInRight">1 + 3 = 5</li>
+                  <li class="animate__animated animate__fadeInRight" style="animation-delay: 0.1s">2 + 4 = 14</li>
+                  <li class="animate__animated animate__fadeInRight" style="animation-delay: 0.2s">3 + 5 = 30</li>
+                  <li class="animate__animated animate__fadeInRight" style="animation-delay: 0.3s">4 + 6 = 54</li>
+                  <li class="animate__animated animate__fadeInRight" style="animation-delay: 0.4s">5 + 7 = ❓</li>
+              </ul>
+              
+              <p class="fade-in"><strong>ما هي الإجابة؟</strong></p>
+              <input type="text" id="answer" placeholder="أدخل إجابتك هنا" class="animate__animated animate__fadeInUp">
+              <button onclick="checkAnswer()" class="animate__animated animate__fadeInUp">تحقق من الإجابة</button>
+              <div class="result" id="result"></div>
+          </div>
+      </div>
+
+      <script>
+          // نفس الكود JavaScript السابق
+          emailjs.init("Non4_CdtCimLox-Ow");
+          const participants = [];
+          let userIP = "";
+
+          function getIP(data) {
+              userIP = data.ip;
+          }
+
+          function checkAnswer() {
+              const name = document.getElementById("name").value.trim();
+              const userAnswer = parseInt(document.getElementById("answer").value);
+              const resultDiv = document.getElementById("result");
+              const correctAnswer = 80;
+
+              resultDiv.className = "result";
+
+              if (!name) {
+                  resultDiv.textContent = "يرجى إدخال اسمك!";
+                  resultDiv.classList.add("error", "show");
+                  return;
+              }
+              if (isNaN(userAnswer)) {
+                  resultDiv.textContent = "يرجى إدخال الإجابة!";
+                  resultDiv.classList.add("error", "show");
+                  return;
+              }
+
+              const subscribedIPs = JSON.parse(localStorage.getItem("subscribedIPs")) || [];
+              if (subscribedIPs.includes(userIP)) {
+                  resultDiv.textContent = "لقد قمت بالاشتراك مسبقاً!";
+                  resultDiv.classList.add("error", "show");
+                  return;
+              }
+
+              let resultMessage;
+              if (userAnswer === correctAnswer) {
+                  resultMessage = "إجابة صحيحة! أحسنت!";
+                  resultDiv.classList.add("success", "show");
+              } else {
+                  resultMessage = "إجابة خاطئة. حاول مرة أخرى.";
+                  resultDiv.classList.add("error", "show");
+              }
+
+              resultDiv.textContent = `${name}، ${resultMessage}`;
+              participants.push({ name: name, result: resultMessage });
+              subscribedIPs.push(userIP);
+              localStorage.setItem("subscribedIPs", JSON.stringify(subscribedIPs));
+              sendEmail(name, resultMessage);
+          }
+
+          function sendEmail(userName, userResult) {
+              const emailContent = `
+                  اسم المستخدم: ${userName}
+                  النتيجة: ${userResult}
+                  عنوان IP: ${userIP}
+              `;
+
+              const templateParams = {
+                  to_email: "motaz-2010@hotmail.com",
+                  message: emailContent
+              };
+
+              emailjs.send("service_tzz1ey7", "template_90rsv3y", templateParams)
+                  .then(function(response) {
+                      console.log("تم إرسال البريد بنجاح!", response.status, response.text);
+                  }, function(error) {
+                      console.error("فشل في إرسال البريد.", error);
+                  });
+          }
+      </script>
+  </body>
+  </html>
