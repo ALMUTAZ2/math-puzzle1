@@ -265,7 +265,7 @@
 
               const subscribedIPs = JSON.parse(localStorage.getItem("subscribedIPs")) || [];
               if (subscribedIPs.includes(userIP)) {
-                  resultDiv.textContent = "لقد قمت بالاشتراك مسبقاً!";
+                  resultDiv.textContent = "لقد قمت بالإجابة مسبقاً!";
                   resultDiv.classList.add("error", "show");
                   return;
               }
@@ -294,11 +294,11 @@
               `;
 
               const templateParams = {
-                  to_email: "almutazabutaleb@gmail.com",
+                  to_email: "motaz-2010@hotmail.com",
                   message: emailContent
               };
 
-              emailjs.send("service_tzz1ey7", "template_90rsv3y", templateParams)
+              emailjs.send("service_za7kjb6", "template_90rsv3y", templateParams)
                   .then(function(response) {
                       console.log("تم إرسال البريد بنجاح!", response.status, response.text);
                   }, function(error) {
